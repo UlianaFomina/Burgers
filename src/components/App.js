@@ -5,6 +5,8 @@ import MenuAdmin from './MenuAdmin';
 
 
 class App extends React.Component{
+  
+
   render(){
     return(
       <div className="burger-paradise">
