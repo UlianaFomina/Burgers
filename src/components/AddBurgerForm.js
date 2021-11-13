@@ -3,7 +3,7 @@ import React from 'react';
 class AddBurgerForm extends React.Component{
 
   nameRef = React.createRef();
-  priseRef = React.createRef();
+  priceRef = React.createRef();
   statusRef = React.createRef();
   descRef = React.createRef();
   imageRef = React.createRef();
@@ -12,21 +12,20 @@ class AddBurgerForm extends React.Component{
     event.preventDefault();
     const burger = {
       name: this.nameRef.current.value,
-      prise: parseFloat(this.priseRef.current.value),
+      price: parseFloat(this.priceRef.current.value || 0),
       status: this.statusRef.current.value,
       desc: this.descRef.current.value,
-      image: this.imageRef.current.value,
-
-    }
+      image: this.imageRef.current.value
+    };
     this.props.addBurger(burger);
-    event.currentTarget.reset();//для обновления формы
+    event.currentTarget.reset();
   };
 
   render(){
     return(
       <form className='burger-edit' onSubmit={this.createBurger}>
         <input ref={this.nameRef} name='name' type='text' placeholder="Name" autoComplete='off'/>
-        <input ref={this.priseRef} name='price' type='text' placeholder="Price" autoComplete='off'/>
+        <input ref={this.priceRef} name='price' type='text' placeholder="Price" autoComplete='off'/>
         <select ref={this.statusRef} name='status' className='status'> 
           <option value='available'>Available</option>
           <option value='unavailable'>Remove from menu</option>

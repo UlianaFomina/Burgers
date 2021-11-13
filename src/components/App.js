@@ -12,13 +12,23 @@ class App extends React.Component{
     order: {}
   }
 
-  addBurger = (burger) => {
-    //1 Делаем копию объекта state
-    const burgers = {...this.state.burgers};
-    //2 Добавляем burger в burgers
-    burgers[`burger${Date.now()}`]= burgers;
-    //3 Зписать обновлённый новый burgers в state
-    this.setState({burgers}); 
+  addToOrder = (key) => {
+    // 1 копия
+    const order = { ...this.state.order };
+    //2 берём ключ бургера и добавляем в ордкр
+    order[key] = order[key] + 1 || 1;
+    //3 записываем в state
+    this.setState({order});
+    
+  };
+
+  addBurger = burger => {
+    // 1. Делаем копию объекта state
+    const burgers = { ...this.state.burgers };
+    // 2. Добавить новый бургер в переменную burgers
+    burgers[`burger${Date.now()}`] = burger;
+    // 3. Записать наш новый объект burgers в state
+    this.setState({ burgers });
   };
 
   loadSampleBurgers = () =>{
@@ -32,7 +42,9 @@ class App extends React.Component{
           <Header title="Very hot Burger"/>
           <ul className="burgers">
             {Object.keys(this.state.burgers).map(key => {
-                  return <Burger key={key} 
+                  return <Burger
+                  addToOrder = {this.addToOrder} 
+                  key={key} 
                   index={key}
                   details = {this.state.burgers[key]}
                   />
