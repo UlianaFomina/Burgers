@@ -6,7 +6,8 @@ class MenuAdmin extends React.Component{
     return(
       <div className="menu-admin">
         <h2>Menu control</h2>
-        <AddBurgerForm />
+        <AddBurgerForm addBurger={this.props.addBurger}/>
+        <button onClick={this.props.LoadSampleBurgers}>Load burgers</button>
       </div>
     );
   }
