@@ -4,12 +4,29 @@ import Order from './Order';
 import MenuAdmin from './MenuAdmin';
 import sampleBurgers from "../sample-burgers";
 import Burger from './Burger';
-
+import base from '../Base';
+//import firebase from 'firebase';
 
 class App extends React.Component{
   state = {
     burgers: {},
     order: {}
+  };
+  //при каждой загрузке страницы связываемся с базой данных и производим сихронизацию
+  componentDidMount() {
+    const { params } = this.props.match;
+    //ref-для ссылки на нужный обьект внутри базы данных 
+    //в state пишем то,что будем синхронизировать
+    this.ref = base.syncState(`${params.restaurantId}/burgers`, {
+      context: this,
+      state: 'burgers'
+    });
+    console.log(params);  
+  }
+  //при переходе на другую страницу компонетн удаляется
+  //чистка, закрываем пакеты по которым работает база 
+  componentWillUnmount(){
+    base.removeBinding(this.ref);
   }
 
   addToOrder = (key) => {
