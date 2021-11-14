@@ -15,13 +15,21 @@ class App extends React.Component{
   //при каждой загрузке страницы связываемся с базой данных и производим сихронизацию
   componentDidMount() {
     const { params } = this.props.match;
+    const localStorageRef = localStorage.getItem(params.restaurantId);
+    if(localStorageRef){
+      this.setState({order:JSON.parse(localStorageRef)})//переводим обратно в обьект
+    }
     //ref-для ссылки на нужный обьект внутри базы данных 
     //в state пишем то,что будем синхронизировать
     this.ref = base.syncState(`${params.restaurantId}/burgers`, {
       context: this,
       state: 'burgers'
     });
-    console.log(params);  
+  }
+
+  componentDidUpdate() {
+    const { params } = this.props.match;
+    localStorage.setItem(params.restaurantId, JSON.stringify(this.state.order));
   }
   //при переходе на другую страницу компонетн удаляется
   //чистка, закрываем пакеты по которым работает база 
@@ -48,6 +56,14 @@ class App extends React.Component{
     this.setState({ burgers });
   };
 
+  updateBurger = (key, updateBurger) => {
+    // 1. Делаем копию объекта state
+    const burgers = { ...this.state.burgers };
+    // 2. Обновляем нужный бургер
+    burgers[key] = updateBurger;
+    // 3. запись в state
+    this.setState({ burgers });
+  }
   loadSampleBurgers = () =>{
     this.setState({burgers:sampleBurgers});
   };
@@ -71,8 +87,12 @@ class App extends React.Component{
           </ul>
         </div>
         <Order burgers={this.state.burgers} order={this.state.order}/> 
-        <MenuAdmin addBurger={this.addBurger}
-        LoadSampleBurgers={this.loadSampleBurgers} />
+        <MenuAdmin 
+        addBurger={this.addBurger} 
+        burgers={this.state.burgers}
+        LoadSampleBurgers={this.loadSampleBurgers} 
+        updateBurger={this.updateBurger}
+        />
       </div>
     );
   }
