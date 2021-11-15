@@ -1,7 +1,14 @@
 import React from 'react';
+import PropTypes from "prop-types";
 import Shipment from './Shipment'
 
 class Order extends React.Component{
+
+  static propTypes = {
+    burgers: PropTypes.object,
+    order: PropTypes.object,
+    deleteFromOrder : PropTypes.func
+  }
 
   renderOrder = (key) => {
       const burger = this.props.burgers[key];
@@ -18,7 +25,7 @@ class Order extends React.Component{
           <span>{count}</span>
           шт. {burger.name}
           <span>  {count * burger.price}  ₽</span>
-          <button className="cancellItem">&times;</button>
+          <button onClick={() => {this.props.deleteFromOrder(key)}} className="cancellItem">&times;</button>
         </span>
       </li>
   }

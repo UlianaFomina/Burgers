@@ -5,9 +5,15 @@ import MenuAdmin from './MenuAdmin';
 import sampleBurgers from "../sample-burgers";
 import Burger from './Burger';
 import base from '../Base';
+import PropTypes from 'prop-types';
 //import firebase from 'firebase';
 
 class App extends React.Component{
+
+  static propTypes = {
+    match: PropTypes.object
+  }
+
   state = {
     burgers: {},
     order: {}
@@ -63,7 +69,27 @@ class App extends React.Component{
     burgers[key] = updateBurger;
     // 3. запись в state
     this.setState({ burgers });
+  };
+
+  deleteBurger = key => {
+    // 1. Делаем копию объекта state
+    const burgers = { ...this.state.burgers };
+    // 2. Удаляем burger
+    burgers[key] = null;
+    // 3. запись в state
+    this.setState({ burgers });
+  };
+
+  deleteFromOrder = key => {
+    // 1. Делаем копию объекта state
+    const order = { ...this.state.order };
+    // 2. 
+    delete order[key];
+    //3 записываем в state
+    this.setState({order});
+
   }
+
   loadSampleBurgers = () =>{
     this.setState({burgers:sampleBurgers});
   };
@@ -72,7 +98,7 @@ class App extends React.Component{
     return(
       <div className="burger-paradise">
         <div className="menu">
-          <Header title="Very hot Burger"/>
+          <Header title="Hot Burger"/>
           <ul className="burgers">
             {Object.keys(this.state.burgers).map(key => {
                   return <Burger
@@ -86,8 +112,12 @@ class App extends React.Component{
             }
           </ul>
         </div>
-        <Order burgers={this.state.burgers} order={this.state.order}/> 
+        <Order 
+        burgers={this.state.burgers}
+         order={this.state.order}
+         deleteFromOrder={this.deleteFromOrder}/> 
         <MenuAdmin 
+        deleteBurger = {this.deleteBurger}
         addBurger={this.addBurger} 
         burgers={this.state.burgers}
         LoadSampleBurgers={this.loadSampleBurgers} 
