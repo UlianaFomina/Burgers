@@ -6,7 +6,9 @@ import sampleBurgers from "../sample-burgers";
 import Burger from './Burger';
 import base from '../Base';
 import PropTypes from 'prop-types';
-//import firebase from 'firebase';
+import firebase from 'firebase/app';
+import Signin from './Auth/Signin';
+import SignIn from './Auth/Signin';
 
 class App extends React.Component{
 
@@ -94,8 +96,14 @@ class App extends React.Component{
     this.setState({burgers:sampleBurgers});
   };
 
+  handleLogout = async() => {
+    await firebase.auth().signOut();
+    window.location.reload();
+  }
+
   render(){
     return(
+      <SignIn>
       <div className="burger-paradise">
         <div className="menu">
           <Header title="Hot Burger"/>
@@ -122,8 +130,10 @@ class App extends React.Component{
         burgers={this.state.burgers}
         LoadSampleBurgers={this.loadSampleBurgers} 
         updateBurger={this.updateBurger}
+        handleLogout={this.handleLogout}
         />
       </div>
+      </SignIn>
     );
   }
 }
